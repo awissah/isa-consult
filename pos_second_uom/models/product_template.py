@@ -17,11 +17,3 @@ class ProductTemplate(models.Model):
                 for template in self):
             raise ValidationError(
                 _('The default Unit of Measure and the second Unit of Measure must be in the same category.'))
-
-        if any(template.second_uom_id and template.second_uom_id.uom_type != "reference" for template in self):
-            raise ValidationError(_('The second Unit of Measure must be a reference unit.'))
-
-    @api.onchange('second_uom_id')
-    def _onchange_second_uom(self):
-        if self.uom_id and self.second_uom_id and self.uom_id.uom_type != "bigger":
-            raise ValidationError(_('The second Unit of Measure can be set only in case of bigger UoM.'))
